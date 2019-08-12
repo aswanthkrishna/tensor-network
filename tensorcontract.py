@@ -48,6 +48,22 @@ class tensor:
              return d
          else:
              return d.ptrace(index[0],index[1])
+         
+            
+     def contractmultiple(self,b,index):
+         newindex = self.index + b.index
+         d = tensor(newindex)
+         for j,v in np.ndenumerate(self.t):
+             for k,w in np.ndenumerate(b.t):
+                 i = list(j+k)
+                 m = tuple(i)
+                 d.t[m] = (v*w)
+         if index == []:
+             return d
+         else:
+             for i in index:
+              d = d.ptrace(i[0],i[1])
+             return d
 #-----------------------------delta------------------------------------------------------------------         
 class delta(tensor):
     def __init__(self,index):
@@ -57,9 +73,9 @@ class delta(tensor):
                 self.t[i] = 1
     
 
-t1 = delta([2,2,2])
-t2 = delta([2,2,2])
-t3 = (t1.contract(t2,[0,1]).t[0,0,0,0])
-print(t3)
+t1 = delta([2])
+t2 = delta([2])
+t3 = (t1.contract(t2,[0,1]))
+
 
 
